@@ -9,4 +9,11 @@
 
 .colorWhite{
     color: #ffffff;
+    fill: white !important;
 }
+
+@media (max-width: 600px) {
+    .smallWidth{
+        max-width: 50%;
+    }
+  }

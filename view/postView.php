@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="css/style.css" /> 
     <title>Post</title>
 </head>
-<body class="container">
+<body>
     <?php require("view/includes/nav.php") ?>
+    <main class="container">
+    </main>
 </body>
 </html>
