@@ -1,6 +1,14 @@
+body{
+    background-color: #E8E7EB;
+}
+
 .colorBlue{
     background-color: #3B5999;
-    color: #3B5999;
+}
+
+.btnSubmit:hover{
+    color:white;
+    background-color: rgb(17, 42, 97);
 }
 
 .backWhite{
@@ -10,6 +18,19 @@
 .colorWhite{
     color: #ffffff;
     fill: white !important;
+}
+
+.lblFileUpload{
+    padding:6px;
+}
+
+.lblFileUpload img{
+    display:block;
+    margin:auto;
+}
+.lblFileUpload:hover{
+    border-radius: 50%;
+    background-color: rgba(80, 80, 80, 0.3);
 }
 
 @media (max-width: 600px) {

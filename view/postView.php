@@ -10,6 +10,14 @@
 <body>
     <?php require("view/includes/nav.php") ?>
     <main class="container">
+        <form method="post" action="" class="mt-2">
+            <div class="form-group">
+                <textarea class="form-control" name="comment" placeholder="Écrivez votre message" style="resize:none;" rows="6"></textarea>
+            </div>
+            <label for="fileUpload" class="lblFileUpload"><img src="icons/camera-solid.svg" height="20em" /></label>
+            <input type="file" style="display: none;" id="fileUpload" name="uplodedFile[]" accept="image/*" multiple class="form-control-file">
+            <input type="submit" class="btn btn-dark btnSubmit colorBlue float-right"/>
+        </form>
     </main>
 </body>
 </html>
