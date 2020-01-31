@@ -21,6 +21,9 @@
         <div id="uploadedImg">
         </div>
     </main>
+    <div id="bigSizeViewBack" onclick="closeBigView()">
+        <img src="images/profilepicture.jpg" alt="profilePicture" id="bigSizeViewImg" onclick="closeBigView()">
+    </div>
     <script type="text/javascript" src="js/imgPreview.js"></script> 
 </body>
 </html>
