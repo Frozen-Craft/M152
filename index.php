@@ -15,7 +15,8 @@ $permissions=[
     "default"=>[
         "index"=> "mainController",
         "home"=> "mainController",
-        "post"=> "postController"
+        "post"=> "postController",
+        "postComment"=> "postController",
     ]
 ];
 

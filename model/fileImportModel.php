@@ -1,8 +1,45 @@
 <?php
 
 //get files
-$file = $_FILES["uploadedFile"];
+$files = $_FILES["uploadedFile"];
+$textComment = filter_input(INPUT_POST, "comment", FILTER_SANITIZE_STRING);
 
+$totalSize = 0;
+foreach($_FILES["uploadedFile"]["size"] as $s) $totalSize+=$s;
+echo $totalSize;
+echo"<pre>";
+var_dump($files);
+
+if($totalSize>70000000){
+	header("Location: ?action=post");
+	exit();
+}
+
+foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?header("Location: ?action=post").exit():"";
+
+if($totalSize == 0 && empty($textComment)){
+	header("Location: ?action=post");
+	exit();
+}
+// startTransaction();
+$idPost = addPost($textComment);
+echo $idPost;
+var_dump(getLastId());
+echo dbConnect()->lastInsertId("idPost");  
+if($idPost==0){
+	// rollback();
+	echo "R";
+}else{
+	// commit();
+	echo "C";
+}
+
+
+//get file type
+
+//mime_content_type ( string $filename (path))
+
+/*
 
 //get extension
 $ext = explode('.', $file);
@@ -29,3 +66,5 @@ $img = imagecreatefromjpeg($_FILES['photo']['tmp_name']);
 	ImageJpeg($img_dst, $dest, 90);
 
 	$success = addPhoto($name, $desc, $cat, $path);
+
+*/
