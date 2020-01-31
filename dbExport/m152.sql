@@ -38,7 +38,7 @@ CREATE TABLE `medias` (
   `creationDate` datetime NOT NULL,
   `modificationDate` datetime NOT NULL,
   `path` varchar(250) CHARACTER SET utf8 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
