@@ -41,6 +41,7 @@ if($totalSize>0){
 		//if file is other than image deleting the post and go back to post page
 		if($type != "image"){
 			deletePost($idPost);
+			//remove all just added files from image folder
 			foreach($addedFiles as $f){
 				unlink('images/'.$f);
 			}
