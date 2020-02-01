@@ -37,7 +37,12 @@ if($totalSize>0){
 		$ext = explode('/', $type)[1];
 		//get global type
 		$type = explode('/', $type)[0];
-		
+		//if file is other than image deleting the post and go back to post page
+		if($type != "image"){
+			deletePost($idPost);
+			header("Location: ?action=postComment");
+			exit();
+		}
 		//move file
 		$newFileName = md5($files["name"][$i].date("d m Y H:i:s:u").uniqid()).'.'.$ext;
 		move_uploaded_file($files['tmp_name'][$i], "images/".$newFileName);

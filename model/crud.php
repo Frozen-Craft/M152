@@ -61,3 +61,12 @@ function getLastId(){
     $result = $querry->execute();
     return $querry->fetchAll(PDO::FETCH_ASSOC)[0]['idPost'];
 }
+
+function deletePost($id){
+    static $querry = null;
+    
+    $querry = dbConnect()->prepare("DELETE FROM `posts` WHERE idPost = :id");
+    $querry -> bindParam("id", $id, PDO::PARAM_INT);
+    $result = $querry->execute();
+    return $result;
+}
