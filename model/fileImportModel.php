@@ -28,6 +28,7 @@ if($totalSize == 0 && empty($textComment)){
 addPost($textComment);
 $idPost = getLastId();
 
+$addedFiles = array();
 //get file type and move files
 if($totalSize>0){
 	for($i = 0; $i < count($files["tmp_name"]); $i++){
@@ -40,6 +41,9 @@ if($totalSize>0){
 		//if file is other than image deleting the post and go back to post page
 		if($type != "image"){
 			deletePost($idPost);
+			foreach($addedFiles as $f){
+				unlink('images/'.$f);
+			}
 			header("Location: ?action=postComment");
 			exit();
 		}
@@ -48,6 +52,7 @@ if($totalSize>0){
 		move_uploaded_file($files['tmp_name'][$i], "images/".$newFileName);
 		//add to db
 		addMedia($type, $files["name"][$i], 'images/'.$newFileName, $idPost);
+		array_push($addedFiles, $newFileName);
 	}
 	
 }
