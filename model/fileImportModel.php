@@ -40,36 +40,37 @@ if($totalSize>0){
 		$type = explode('/', $type)[0];
 		//if file is other than image deleting the post and go back to post page
 		if($type != "image"){
-			deletePost($idPost);
-			//remove all just added files from image folder
-			foreach($addedFiles as $f){
-				unlink('images/'.$f);
-			}
-			header("Location: ?action=postComment");
-			exit();
+			cancelPosting();
 		}
 		//move file
 		$newFileName = md5($files["name"][$i].date("d m Y H:i:s:u").uniqid()).'.'.$ext;
-		move_uploaded_file($files['tmp_name'][$i], "images/".$newFileName);
+		$result = move_uploaded_file($files['tmp_name'][$i], "images/".$newFileName);
 		//add to db
-		addMedia($type, $files["name"][$i], 'images/'.$newFileName, $idPost);
-		array_push($addedFiles, $newFileName);
+		if($result === 1)
+		{
+			$result = addMedia($type, $files["name"][$i], 'images/'.$newFileName, $idPost);
+			if($result === 1)
+				array_push($addedFiles, $newFileName);
+			else
+				cancelPosting();
+		}else{
+			cancelPosting();
+		}
 	}
 	
 }
 
+function cancelPosting(){
+	deletePost($idPost);
+	//remove all just added files from image folder
+	foreach($addedFiles as $f){
+		unlink('images/'.$f);
+	}
+	header("Location: ?action=postComment");
+	exit();
+}
+
 /*
-
-//get extension
-
-
-// unique name --> md5($file.date("d m Y H:i:s:u").uniqid())
-
-//Move
-$success = move_uploaded_file($_FILES["photo"]['tmp_name'], $dest);
-
-
-
 
 //Resize
 $img = imagecreatefromjpeg($_FILES['photo']['tmp_name']);
