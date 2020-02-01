@@ -24,7 +24,7 @@ function dbConnect(){
 }
 
 
-function addMedia($type, $name, $path){
+function addMedia($type, $name, $path, $idPost){
     static $querry = null;
     
     $now = date("Y/m/d H:i:s");
@@ -53,24 +53,11 @@ function addPost($comment){
     $querry -> bindParam("modificationD", $now, PDO::PARAM_STR);
     $result = $querry->execute();
     
-    return dbConnect()->lastInsertId("idPost");    
+    return $result;    
 }
 
 function getLastId(){
-    $querry = dbConnect()->prepare("SELECT LAST_INSERT_ID() FROM posts;");
+    $querry = dbConnect()->prepare("SELECT idPost from posts ORDER BY idPOst DESC LIMIT 1");
     $result = $querry->execute();
-    return $querry->fetchAll();
-    // return dbConnect()->lastInsertId('idPost');    
-}
-
-function startTransaction(){
-    dbConnect()->beginTransaction();
-}
-
-function commit(){
-    dbConnect()->commit();
-}
-
-function rollback(){
-    dbConnect()->rollback();
+    return $querry->fetchAll(PDO::FETCH_ASSOC)[0]['idPost'];
 }
