@@ -6,13 +6,9 @@ $textComment = filter_input(INPUT_POST, "comment", FILTER_SANITIZE_STRING);
 
 $totalSize = 0;
 foreach($_FILES["uploadedFile"]["size"] as $s) $totalSize+=$s;
-echo $totalSize;
-echo"<pre>";
-var_dump($files);
 
 //if total file size >70mo return post page
 if($totalSize>70000000){
-	echo "l15";
 	// header("Location: ?action=post");
 	exit();
 }
@@ -22,7 +18,7 @@ foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?/*header("Location: ?a
 
 //if form empty return post page
 if($totalSize == 0 && empty($textComment)){
-	// header("Location: ?action=post");
+	header("Location: ?action=post");
 	exit();
 }
 
@@ -60,6 +56,8 @@ if($totalSize>0){
 	}
 	
 }
+header("Location: ?action=index&successPost=true");
+exit();
 
 function cancelPosting(){
 	global $idPost, $addedFiles;
@@ -68,7 +66,7 @@ function cancelPosting(){
 	foreach($addedFiles as $f){
 		unlink('images/'.$f);
 	}
-	// header("Location: ?action=postComment");
+	header("Location: ?action=postComment");
 	exit();
 }
 
