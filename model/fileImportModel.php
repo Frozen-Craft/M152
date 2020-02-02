@@ -12,16 +12,17 @@ var_dump($files);
 
 //if total file size >70mo return post page
 if($totalSize>70000000){
-	header("Location: ?action=post");
+	echo "l15";
+	// header("Location: ?action=post");
 	exit();
 }
 
 //if a file size is > 3mo return post page
-foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?header("Location: ?action=post").exit():"";
+foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?/*header("Location: ?action=post")*/"l21".exit():"";
 
 //if form empty return post page
 if($totalSize == 0 && empty($textComment)){
-	header("Location: ?action=post");
+	// header("Location: ?action=post");
 	exit();
 }
 
@@ -46,10 +47,10 @@ if($totalSize>0){
 		$newFileName = md5($files["name"][$i].date("d m Y H:i:s:u").uniqid()).'.'.$ext;
 		$result = move_uploaded_file($files['tmp_name'][$i], "images/".$newFileName);
 		//add to db
-		if($result === 1)
+		if($result == 1)
 		{
 			$result = addMedia($type, $files["name"][$i], 'images/'.$newFileName, $idPost);
-			if($result === 1)
+			if($result == 1)
 				array_push($addedFiles, $newFileName);
 			else
 				cancelPosting();
@@ -61,12 +62,13 @@ if($totalSize>0){
 }
 
 function cancelPosting(){
+	global $idPost, $addedFiles;
 	deletePost($idPost);
 	//remove all just added files from image folder
 	foreach($addedFiles as $f){
 		unlink('images/'.$f);
 	}
-	header("Location: ?action=postComment");
+	// header("Location: ?action=postComment");
 	exit();
 }
 

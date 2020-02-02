@@ -32,6 +32,6 @@ document.addEventListener('keyup', (e) => {
     closeBigView();
     var key = e.key;
     if(key != "Enter" && key != "Escape"){
-        document.getElementById("comment").focus();
+        // document.getElementById("comment").focus();
     }
 });

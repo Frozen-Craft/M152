@@ -6,6 +6,5 @@ if(is_null($postingComment))
     require("view/postView.php");
 else{
     require("model/crud.php");
-    require("model/fileImportModel.php"); 
-   
+    require("model/fileImportModel.php");   
 }

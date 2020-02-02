@@ -9,7 +9,7 @@
 session_start();
 
 $dest = filter_input(INPUT_GET, "action", FILTER_SANITIZE_STRING);
-$role="default";
+$role = "default";
 
 $permissions=[
     "default"=>[
