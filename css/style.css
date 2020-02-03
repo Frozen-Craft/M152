@@ -66,10 +66,8 @@ body{
     max-height: 100px;
 }
 
-.posts img, .posts carousel{
-    margin: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.posts img, .posts .carousel{
+    margin: 10px auto;
     max-width: 95%;
 }
 
