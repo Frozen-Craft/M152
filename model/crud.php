@@ -70,3 +70,37 @@ function deletePost($id){
     $result = $querry->execute();
     return $result;
 }
+
+function getPosts(){
+    static $querry = null;
+    $querry = dbConnect()->prepare("SELECT * FROM posts ORDER BY creationDate DESC");
+    $result = $querry->execute();
+    return $querry->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getMedia($idPost){
+    static $querry = null;
+    $querry = dbConnect()->prepare("SELECT * FROM medias WHERE idPost = :id");
+    $querry -> bindParam("id", $idPost, PDO::PARAM_INT);
+    $result = $querry->execute();
+    return $querry->fetchAll(PDO::FETCH_ASSOC);
+
+}
+
+function getArrangedPosts(){
+    $posts = getPosts();
+    $arrangedPosts = array();
+    if(count($posts)>0){
+        foreach ($posts as $p){
+            $aMedia = array();
+            $medias = getMedia($p['idPost']);
+            if(count($medias)>0){
+                foreach ($medias as $m){
+                    array_push($aMedia, ['mediaName'=>$m['nameMedia'], 'mediaPath'=>$m['mediaPath'], 'typeMedia'=>$m['typeMedia']]);
+                }
+            }
+            array_push($arrangedPosts, [$p['idPost'], $p['comment'], $aMedia]);
+        }
+    }
+    return $arrangedPosts;
+}

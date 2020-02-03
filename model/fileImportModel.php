@@ -9,12 +9,12 @@ foreach($_FILES["uploadedFile"]["size"] as $s) $totalSize+=$s;
 
 //if total file size >70mo return post page
 if($totalSize>70000000){
-	// header("Location: ?action=post");
+	header("Location: ?action=post");
 	exit();
 }
 
 //if a file size is > 3mo return post page
-foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?/*header("Location: ?action=post")*/"l21".exit():"";
+foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?header("Location: ?action=post").exit():"";
 
 //if form empty return post page
 if($totalSize == 0 && empty($textComment)){
@@ -37,7 +37,7 @@ if($totalSize>0){
 		$type = explode('/', $type)[0];
 		//if file is other than image deleting the post and go back to post page
 		if($type != "image"){
-			cancelPosting();
+			cancelPosting("Wrong type");
 		}
 		//move file
 		$newFileName = md5($files["name"][$i].date("d m Y H:i:s:u").uniqid()).'.'.$ext;
@@ -49,9 +49,9 @@ if($totalSize>0){
 			if($result == 1)
 				array_push($addedFiles, $newFileName);
 			else
-				cancelPosting();
+				cancelPosting("Failed to add to db");
 		}else{
-			cancelPosting();
+			cancelPosting("Failed to move file");
 		}
 	}
 	
@@ -59,14 +59,14 @@ if($totalSize>0){
 header("Location: ?action=index&successPost=true");
 exit();
 
-function cancelPosting(){
+function cancelPosting($error){
 	global $idPost, $addedFiles;
 	deletePost($idPost);
 	//remove all just added files from image folder
 	foreach($addedFiles as $f){
 		unlink('images/'.$f);
 	}
-	header("Location: ?action=postComment");
+	header("Location: ?action=postComment&error=".$error);
 	exit();
 }
 

@@ -10,15 +10,15 @@ class Post
 
     function __construct($idPost, $comment)
     {
-        $this->$idPost = $idPost;
-        $this->$comment = $comment;
+        $this->idPost = $idPost;
+        $this->comment = $comment;
     }
 
     function makeCard()
     {
-        $card = '<div class="card mt-2 mb-2">';
+        $card = '<div class="card mt-2 mb-2"><p>';
         $card .= $this->comment;
-        $card = '</div>';
+        $card .= '</p></div>';
         $this->card = $card;
     }
 
@@ -37,21 +37,21 @@ class PostWithSingleImage extends Post
     function __construct($idPost, $comment, $picture)
     {
         parent::__construct($idPost, $comment);
-        $this->$picture = $picture;
+        $this->picture = $picture;
     }
 
     function makeCard()
     {
         $card = '<div class="card mt-2 mb-2">';
-        $card .= sprintf('<img src="%s" alt="%s"', $this->picture['path'], $this->picture['name']);
+        $card .= sprintf('<img src="%s" onclick="biggerImg(this)" alt="%s" /><p>', $this->picture['mediaPath'], $this->picture['mediaName']);
         $card .= $this->comment;
-        $card .= '</div>';
+        $card .= '</p></div>';
         $this->card = $card;
     }
 
     function getCard()
     {
-        parent::getCard();
+        return $this->card;
     }
 }
 
@@ -65,7 +65,7 @@ class PostWithMultipleImage extends Post
     function __construct($idPost, $comment, $pictures)
     {
         parent::__construct($idPost, $comment);
-        $this->$pictures = $pictures;
+        $this->pictures = $pictures;
     }
 
     function makeCard()
@@ -80,15 +80,23 @@ class PostWithMultipleImage extends Post
                      <ol class="carousel-indicators">';
 
         for ($i = 0; $i < count($this->pictures); $i++) {
-            $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class="active"></li>';
+            if($i==0){
+                $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class="active"></li>';
+            }else{
+                $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class=""></li>';
+            }
         }
 
         $carousel .= '</ol>
                       <div class="carousel-inner">';
 
-        foreach ($this->pictures as $p) {
-            $carousel .= '<div class="carousel-item">';
-            $carousel .= sprintf('<img src="%s" class="d-block w-100" alt="%s" />', $p['path'], $p['name']);
+        foreach ($this->pictures as $key => $p) {
+            if($key==0){
+                $carousel .= '<div class="carousel-item active">';
+            }else {
+                $carousel .= '<div class="carousel-item ">';
+            }
+            $carousel .= sprintf('<img src="%s" onclick="biggerImg(this)" class="d-block w-100" alt="%s" />', $p['mediaPath'], $p['nameMedia']);
             $carousel .= '</div>';
         }
         $carousel .= '</div>
@@ -100,10 +108,16 @@ class PostWithMultipleImage extends Post
                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
                       <span class="sr-only">Next</span>
                       </a>
-                      </div>
-                      </div>';
+                      </div><p>';
+        $carousel .= $this->comment;
+        $carousel .= '</p></div>';
 
         $this->carousel = $carousel;
+    }
+
+    function getComment()
+    {
+        return $this->pictures;
     }
 
     function getCard()

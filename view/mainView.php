@@ -9,6 +9,9 @@
 </head>
 <body>
 <?php require("view/includes/nav.php") ?>
+<div id="bigSizeViewBack" class="position-fixed" onclick="closeBigView()">
+    <img src="" alt="" id="bigSizeViewImg" onclick="closeBigView()">
+</div>
 <main class="container">
     <?= $info ?>
     <div class="row mt-2 mb-2 mx-auto">
@@ -28,10 +31,11 @@
             </div>
             <!-- TEST -->
             <div class="posts">
-
+                <?= $allCards ?>
             </div>
         </div>
     </div>
 </main>
+<script src="js/biggerImage.js" type="text/javascript"></script>
 </body>
 </html>
