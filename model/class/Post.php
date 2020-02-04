@@ -16,7 +16,8 @@ class Post
 
     function makeCard()
     {
-        $card = '<div class="card mt-2 mb-2"><p>';
+        $card = '<div class="card mt-2 mb-2">
+                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
         $card .= $this->comment;
         $card .= '</p></div>';
         $this->card = $card;
@@ -42,7 +43,8 @@ class PostWithSingleImage extends Post
 
     function makeCard()
     {
-        $card = '<div class="card mt-2 mb-2">';
+        $card = '<div class="card mt-2 mb-2">
+                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="icons/times-circle-solid.svg" alt="remove-icon" /></a></div>';
         $card .= sprintf('<img src="%s" onclick="biggerImg(this)" alt="%s" /><p>', $this->picture['mediaPath'], $this->picture['mediaName']);
         $card .= $this->comment;
         $card .= '</p></div>';
@@ -76,6 +78,7 @@ class PostWithMultipleImage extends Post
     function makeCarousel()
     {
         $carousel = '<div class="card mt-2 mb-2">
+                     <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="icons/times-circle-solid.svg" alt="remove-icon" /></a></div>
                      <div id="carouselIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
                      <ol class="carousel-indicators">';
 

@@ -72,6 +72,14 @@ body{
     max-height: 80vh;
 }
 
+.icons{
+    width: 20px;
+}
+
+.icons:hover{
+    fill: blue;
+}
+
 @media (max-width: 600px) {
     .smallWidth{
         max-width: 50%;
