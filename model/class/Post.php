@@ -17,7 +17,7 @@ class Post
     function makeCard()
     {
         $card = '<div class="card mt-2 mb-2">
-                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
+                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
         $card .= $this->comment;
         $card .= '</p></div>';
         $this->card = $card;
@@ -30,22 +30,32 @@ class Post
 
 }
 
-class PostWithSingleImage extends Post
+class PostWithSingleMedia extends Post
 {
 
-    private $picture;
+    private $media;
 
-    function __construct($idPost, $comment, $picture)
+    function __construct($idPost, $comment, $media)
     {
         parent::__construct($idPost, $comment);
-        $this->picture = $picture;
+        $this->media = $media;
     }
 
     function makeCard()
     {
         $card = '<div class="card mt-2 mb-2">
-                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="icons/times-circle-solid.svg" alt="remove-icon" /></a></div>';
-        $card .= sprintf('<img src="%s" onclick="biggerImg(this)" alt="%s" /><p>', $this->picture['mediaPath'], $this->picture['mediaName']);
+                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>';
+        switch ($this->media['typeMedia']){
+            case "image":
+                $card .= sprintf('<img src="%s" onclick="biggerImg(this)" alt="%s" /><p>', $this->media['mediaPath'], $this->media['mediaName']);
+            break;
+            case "video":
+                $card .= sprintf('<video><source src="%s" type="%s" /><p></video>', $this->media['mediaPath'], $this->media['fullMediaType']);
+            break;
+            case "audio":
+                $card .= sprintf('<audio><source src="%s" type="%s" /><p></audio>', $this->media['mediaPath'], $this->media['fullMediaType']);
+            break;
+        }
         $card .= $this->comment;
         $card .= '</p></div>';
         $this->card = $card;
@@ -78,7 +88,7 @@ class PostWithMultipleImage extends Post
     function makeCarousel()
     {
         $carousel = '<div class="card mt-2 mb-2">
-                     <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="icons/times-circle-solid.svg" alt="remove-icon" /></a></div>
+                     <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>
                      <div id="carouselIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
                      <ol class="carousel-indicators">';
 
@@ -99,7 +109,7 @@ class PostWithMultipleImage extends Post
             }else {
                 $carousel .= '<div class="carousel-item ">';
             }
-            $carousel .= sprintf('<img src="%s" onclick="biggerImg(this)" class="d-block w-100" alt="%s" />', $p['mediaPath'], $p['nameMedia']);
+            $carousel .= sprintf('<img src="meida/%s" onclick="biggerImg(this)" class="d-block w-100" alt="%s" />', $p['mediaPath'], $p['nameMedia']);
             $carousel .= '</div>';
         }
         $carousel .= '</div>

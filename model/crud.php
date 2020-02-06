@@ -23,15 +23,14 @@ function dbConnect(){
 }
 
 
-function addMedia($type, $name, $path, $idPost){
+function addMedia($type, $fullType, $name, $path, $idPost){
     static $querry = null;
-    
-    $req='INSERT INTO `medias` (typeMedia, nameMedia, creationDate, modificationDate, mediaPath, idPost) VALUES (:type, :name, :creatioD, :modificationD, :path, :idPost)';
-    
+        
     $now = date("Y/m/d H:i:s");
     
-    $querry = dbConnect()->prepare("INSERT INTO `medias` (typeMedia, nameMedia, creationDate, modificationDate, mediaPath, idPost) VALUES (:type, :name, :creatioD, :modificationD, :path, :idPost)");
+    $querry = dbConnect()->prepare("INSERT INTO `medias` (typeMedia, fullMediaType, nameMedia, creationDate, modificationDate, mediaPath, idPost) VALUES (:type, :fullType, :name, :creatioD, :modificationD, :path, :idPost)");
     $querry -> bindParam("type", $type, PDO::PARAM_STR);
+    $querry -> bindParam("fullType", $fullType, PDO::PARAM_STR);
     $querry -> bindParam("name", $name, PDO::PARAM_STR);
     $querry -> bindParam("creatioD", $now, PDO::PARAM_STR);
     $querry -> bindParam("modificationD", $now, PDO::PARAM_STR);
@@ -55,12 +54,6 @@ function addPost($comment){
     $result = $querry->execute();
     
     return dbConnect()->lastInsertId();    
-}
-
-function getLastId(){
-    $querry = dbConnect()->prepare("SELECT idPost from posts ORDER BY idPOst DESC LIMIT 1");
-    $result = $querry->execute();
-    return $querry->fetchAll(PDO::FETCH_ASSOC)[0]['idPost'];
 }
 
 function deletePost($id){
@@ -88,24 +81,6 @@ function getMedia($idPost){
 
 }
 
-function getArrangedPosts(){
-    $posts = getPosts();
-    $arrangedPosts = array();
-    if(count($posts)>0){
-        foreach ($posts as $p){
-            $aMedia = array();
-            $medias = getMedia($p['idPost']);
-            if(count($medias)>0){
-                foreach ($medias as $m){
-                    array_push($aMedia, ['mediaName'=>$m['nameMedia'], 'mediaPath'=>$m['mediaPath'], 'typeMedia'=>$m['typeMedia']]);
-                }
-            }
-            array_push($arrangedPosts, [$p['idPost'], $p['comment'], $aMedia]);
-        }
-    }
-    return $arrangedPosts;
-}
-
 function startTransaction(){
     dbConnect()->beginTransaction();
 }
@@ -116,4 +91,22 @@ function rollback(){
 
 function commit(){
     dbConnect()->commit();
+}
+
+function getArrangedPosts(){
+    $posts = getPosts();
+    $arrangedPosts = array();
+    if(count($posts)>0){
+        foreach ($posts as $p){
+            $aMedia = array();
+            $medias = getMedia($p['idPost']);
+            if(count($medias)>0){
+                foreach ($medias as $m){
+                    array_push($aMedia, ['mediaName'=>$m['nameMedia'], 'mediaPath'=>$m['mediaPath'], 'typeMedia'=>$m['typeMedia'], 'fullMediaType'=>$m['fullMediaType']]);
+                }
+            }
+            array_push($arrangedPosts, [$p['idPost'], $p['comment'], $aMedia]);
+        }
+    }
+    return $arrangedPosts;
 }

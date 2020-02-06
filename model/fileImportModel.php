@@ -30,22 +30,22 @@ $addedFiles = array();
 if($totalSize>0){
 	for($i = 0; $i < count($files["tmp_name"]); $i++){
 		//get file type
-		$type = mime_content_type($files["tmp_name"][$i]);
+		$fullType = mime_content_type($files["tmp_name"][$i]);
 		//get file ext
-		$ext = explode('/', $type)[1];
+		$ext = explode('/', $fullType)[1];
 		//get global type
-		$type = explode('/', $type)[0];
+		$type = explode('/', $fullType)[0];
 		//if file is other than image deleting the post and go back to post page
-		if($type != "image" && $type != "video" && $type != "audio"){
+		if($type != "image" && $ext != "mp3" && $ext!= "wav" && $type != "audio"){
 			cancelPosting("Wrong type");
 		}
 		//move file
 		$newFileName = md5($files["name"][$i].date("d m Y H:i:s:u").uniqid()).'.'.$ext;
-		$result = move_uploaded_file($files['tmp_name'][$i], "media/images/".$newFileName);
+		$result = move_uploaded_file($files['tmp_name'][$i], "media/".$type."/".$newFileName);
 		//add to db
 		if($result == 1)
 		{
-			$result = addMedia($type, $files["name"][$i], 'media/images/'.$newFileName, $idPost);
+			$result = addMedia($type, $fullType, $files["name"][$i], 'media/images/'.$newFileName, $idPost);
 			if($result == 1)
 				array_push($addedFiles, $newFileName);
 			else
@@ -57,7 +57,7 @@ if($totalSize>0){
 	
 }
 commit();
-// header("Location: ?action=index&successPost=true");
+header("Location: ?action=index&successPost=true");
 exit();
 
 function cancelPosting($error){
