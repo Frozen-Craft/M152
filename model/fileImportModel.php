@@ -5,7 +5,7 @@ $files = $_FILES["uploadedFile"];
 $textComment = filter_input(INPUT_POST, "comment", FILTER_SANITIZE_STRING);
 
 $totalSize = 0;
-foreach($_FILES["uploadedFile"]["size"] as $s) $totalSize+=$s;
+foreach($_FILES["uploadedFile"]["size"] as $s) $totalSize += $s;
 
 //if total file size >70mo return post page
 if($totalSize>70000000){
