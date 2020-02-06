@@ -14,7 +14,7 @@ if($totalSize>70000000){
 }
 
 //if a file size is > 3mo return post page
-foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?header("Location: ?action=post").exit():"";
+foreach($_FILES["uploadedFile"]["size"] as $s) $s>3000000?header("Location: ?action=post&error=File%20too%20big").exit():"";
 
 //if form empty return post page
 if($totalSize == 0 && empty($textComment)){
@@ -22,8 +22,8 @@ if($totalSize == 0 && empty($textComment)){
 	exit();
 }
 
-addPost($textComment);
-$idPost = getLastId();
+startTransaction();
+$idPost = addPost($textComment);
 
 $addedFiles = array();
 //get file type and move files
@@ -36,16 +36,16 @@ if($totalSize>0){
 		//get global type
 		$type = explode('/', $type)[0];
 		//if file is other than image deleting the post and go back to post page
-		if($type != "image"){
+		if($type != "image" && $type != "video" && $type != "audio"){
 			cancelPosting("Wrong type");
 		}
 		//move file
 		$newFileName = md5($files["name"][$i].date("d m Y H:i:s:u").uniqid()).'.'.$ext;
-		$result = move_uploaded_file($files['tmp_name'][$i], "images/".$newFileName);
+		$result = move_uploaded_file($files['tmp_name'][$i], "media/images/".$newFileName);
 		//add to db
 		if($result == 1)
 		{
-			$result = addMedia($type, $files["name"][$i], 'images/'.$newFileName, $idPost);
+			$result = addMedia($type, $files["name"][$i], 'media/images/'.$newFileName, $idPost);
 			if($result == 1)
 				array_push($addedFiles, $newFileName);
 			else
@@ -56,19 +56,21 @@ if($totalSize>0){
 	}
 	
 }
-header("Location: ?action=index&successPost=true");
+commit();
+// header("Location: ?action=index&successPost=true");
 exit();
 
 function cancelPosting($error){
-	global $idPost, $addedFiles;
-	deletePost($idPost);
+	global $addedFiles;
+	rollback();
 	//remove all just added files from image folder
 	foreach($addedFiles as $f){
-		unlink('images/'.$f);
+		unlink('media/images/'.$f);
 	}
 	header("Location: ?action=postComment&error=".$error);
 	exit();
 }
+
 
 /*
 

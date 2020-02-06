@@ -3,14 +3,14 @@
 include "access/db.php";
 
 function dbConnect(){
-	static  $connection = null;
+	static $db = null;
 	
 	$host = "127.0.0.1";
 	$name = "m152";
-	$user= USERNAME;
-	$pass= PASSWORD;
+	$user = USERNAME;
+	$pass = PASSWORD;
 	
-	if($connection == null){
+	if($db == null){
 		try {
             $connexionString = 'mysql:host=' . $host . ';dbname=' . $name . '';
             $db = new PDO($connexionString, $user, $pass);
@@ -20,12 +20,13 @@ function dbConnect(){
         }
     }
     return $db;
-
 }
 
 
 function addMedia($type, $name, $path, $idPost){
     static $querry = null;
+    
+    $req='INSERT INTO `medias` (typeMedia, nameMedia, creationDate, modificationDate, mediaPath, idPost) VALUES (:type, :name, :creatioD, :modificationD, :path, :idPost)';
     
     $now = date("Y/m/d H:i:s");
     
@@ -53,7 +54,7 @@ function addPost($comment){
     $querry -> bindParam("modificationD", $now, PDO::PARAM_STR);
     $result = $querry->execute();
     
-    return $result;    
+    return dbConnect()->lastInsertId();    
 }
 
 function getLastId(){
@@ -103,4 +104,16 @@ function getArrangedPosts(){
         }
     }
     return $arrangedPosts;
+}
+
+function startTransaction(){
+    dbConnect()->beginTransaction();
+}
+
+function rollback(){
+    dbConnect()->rollback();
+}
+
+function commit(){
+    dbConnect()->commit();
 }
