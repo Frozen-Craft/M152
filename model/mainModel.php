@@ -17,7 +17,7 @@ $allCards='';
 
 foreach ($posts as $p){
     if(count($p[2])>1){
-        $c = new PostWithMultipleImage($p[0], $p[1], $p[2]);
+        $c = new PostWithMultipleMedia($p[0], $p[1], $p[2]);
         $c->makeCarousel();
         $allCards.=$c->getCarousel();
     }elseif(count($p[2])==1){

@@ -45,7 +45,7 @@ if($totalSize>0){
 		//add to db
 		if($result == 1)
 		{
-			$result = addMedia($type, $fullType, $files["name"][$i], 'media/images/'.$newFileName, $idPost);
+			$result = addMedia($type, $fullType, $files["name"][$i], 'media/'.$type.'/'.$newFileName, $idPost);
 			if($result == 1)
 				array_push($addedFiles, $newFileName);
 			else

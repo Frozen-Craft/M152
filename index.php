@@ -17,6 +17,7 @@ $permissions=[
         "home"=> "mainController",
         "post"=> "postController",
         "postComment"=> "postController",
+        "removePost"=> "removePost",
     ]
 ];
 

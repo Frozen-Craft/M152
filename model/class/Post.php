@@ -17,7 +17,7 @@ class Post
     function makeCard()
     {
         $card = '<div class="card mt-2 mb-2">
-                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
+                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
         $card .= $this->comment;
         $card .= '</p></div>';
         $this->card = $card;
@@ -44,16 +44,16 @@ class PostWithSingleMedia extends Post
     function makeCard()
     {
         $card = '<div class="card mt-2 mb-2">
-                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="#"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>';
+                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>';
         switch ($this->media['typeMedia']){
             case "image":
                 $card .= sprintf('<img src="%s" onclick="biggerImg(this)" alt="%s" /><p>', $this->media['mediaPath'], $this->media['mediaName']);
             break;
             case "video":
-                $card .= sprintf('<video><source src="%s" type="%s" /><p></video>', $this->media['mediaPath'], $this->media['fullMediaType']);
+                $card .= sprintf('<video width="320" height="240" autoplay loop controls><source src="%s" type="%s" /></video><p>', $this->media['mediaPath'], $this->media['fullMediaType']);
             break;
             case "audio":
-                $card .= sprintf('<audio><source src="%s" type="%s" /><p></audio>', $this->media['mediaPath'], $this->media['fullMediaType']);
+                $card .= sprintf('<audio controls><source src="%s" type="%s" /></audio><p>', $this->media['mediaPath'], $this->media['fullMediaType']);
             break;
         }
         $card .= $this->comment;
@@ -67,7 +67,7 @@ class PostWithSingleMedia extends Post
     }
 }
 
-class PostWithMultipleImage extends Post
+class PostWithMultipleMedia extends Post
 {
 
     private $pictures;

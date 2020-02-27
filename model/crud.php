@@ -61,6 +61,13 @@ function deletePost($id){
     
     $querry = dbConnect()->prepare("DELETE FROM `posts` WHERE idPost = :id");
     $querry -> bindParam("id", $id, PDO::PARAM_INT);
+    return $querry->execute();
+}
+function deletePostMedias($id){
+    static $querry = null;
+    
+    $querry = dbConnect()->prepare("DELETE FROM `medias` WHERE idPost = :id");
+    $querry -> bindParam("id", $id, PDO::PARAM_INT);
     $result = $querry->execute();
     return $result;
 }
