@@ -15,15 +15,15 @@
                 <textarea class="form-control" name="comment" id="comment" placeholder="Écrivez votre message" style="resize:none;" rows="6"></textarea>
             </div>
             <label for="fileUpload" class="lblFileUpload"><img src="css/icons/camera-solid.svg" height="20em" /></label>
-            <input type="file" style="display: none;" id="fileUpload" onchange="loadFile(event)" name="uploadedFile[]" accept="image/*,video/*, .mp3, .wav" multiple class="form-control-file">
+            <input type="file" style="display: none;" id="fileUpload" name="uploadedFile[]" accept="image/*,video/*, .mp3, .wav" multiple class="form-control-file">
             <input type="submit" name="submit" class="btn btn-dark btnSubmit colorBlue float-right"/>
         </form>
         <div id="uploadedImg">
         </div>
     </main>
-    <div id="bigSizeViewBack" onclick="closeBigView()">
-        <img src="" alt="" id="bigSizeViewImg" onclick="closeBigView()">
+    <div id="bigSizeViewBack"">
+        <img src="" alt="" id="bigSizeViewImg" ">
     </div>
-    <script type="text/javascript" src="js/imgPreview.js"></script> 
+    <!-- <script type="text/javascript" src="js/imgPreview.js"></script>  -->
 </body>
 </html>

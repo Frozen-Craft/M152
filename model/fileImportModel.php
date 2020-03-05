@@ -36,7 +36,7 @@ if($totalSize>0){
 		//get global type
 		$type = explode('/', $fullType)[0];
 		//if file is other than image deleting the post and go back to post page
-		if($type != "image" && $ext != "mp3" && $ext!= "wav" && $type != "audio"){
+		if($type != "image" && $type != "video" && $type != "audio"){
 			cancelPosting("Wrong type");
 		}
 		//move file

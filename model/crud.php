@@ -109,7 +109,7 @@ function getArrangedPosts(){
             $medias = getMedia($p['idPost']);
             if(count($medias)>0){
                 foreach ($medias as $m){
-                    array_push($aMedia, ['mediaName'=>$m['nameMedia'], 'mediaPath'=>$m['mediaPath'], 'typeMedia'=>$m['typeMedia'], 'fullMediaType'=>$m['fullMediaType']]);
+                    array_push($aMedia, ['nameMedia'=>$m['nameMedia'], 'mediaPath'=>$m['mediaPath'], 'typeMedia'=>$m['typeMedia'], 'fullMediaType'=>$m['fullMediaType']]);
                 }
             }
             array_push($arrangedPosts, [$p['idPost'], $p['comment'], $aMedia]);

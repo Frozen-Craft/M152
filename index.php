@@ -18,6 +18,7 @@ $permissions=[
         "post"=> "postController",
         "postComment"=> "postController",
         "removePost"=> "removePost",
+        "editPost"=> "editPost"
     ]
 ];
 
