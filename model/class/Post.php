@@ -72,7 +72,6 @@ class PostWithMultipleMedia extends Post
 
     private $pictures;
 
-    private $carousel;
 
     function __construct($idPost, $comment, $pictures)
     {
@@ -87,45 +86,63 @@ class PostWithMultipleMedia extends Post
 
     function makeCarousel()
     {
-        $carousel = '<div class="card mt-2 mb-2">
-                     <div class="mr-3 text-right"><a href="?action=editPost&idPost='.$this->idPost.'"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>
-                     <div id="carouselIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
-                     <ol class="carousel-indicators">';
+        $card = '<div class="card mt-2 mb-2">
+                 <div class="mr-3 text-right"><a href="?action=editPost&idPost='.$this->idPost.'"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>';
 
-        for ($i = 0; $i < count($this->pictures); $i++) {
-            if($i==0){
-                $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class="active"></li>';
-            }else{
-                $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class=""></li>';
-            }
-        }
+        // $carousel = '<div class="card mt-2 mb-2">
+        //              <div class="mr-3 text-right"><a href="?action=editPost&idPost='.$this->idPost.'"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div>
+        //              <div id="carouselIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
+        //              <ol class="carousel-indicators">';
 
-        $carousel .= '</ol>
-                      <div class="carousel-inner">';
+        // for ($i = 0; $i < count($this->pictures); $i++) {
+        //     if($i==0){
+        //         $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class="active"></li>';
+        //     }else{
+        //         $carousel .= '<li data-target="#carouselIndicators" data-slide-to="' . $i . '" class=""></li>';
+        //     }
+        // }
+
+        // $carousel .= '</ol>
+        //               <div class="carousel-inner">';
 
         foreach ($this->pictures as $key => $p) {
-            if($key==0){
-                $carousel .= '<div class="carousel-item active">';
-            }else {
-                $carousel .= '<div class="carousel-item ">';
-            }
-            $carousel .= sprintf('<img src="%s" onclick="biggerImg(this)" class="d-block w-100" alt="%s" />', $p['mediaPath'], $p['nameMedia']);
-            $carousel .= '</div>';
-        }
-        $carousel .= '</div>
-                      <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                      </a>
-                      <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                      </a>
-                      </div><p>';
-        $carousel .= $this->comment;
-        $carousel .= '</p></div>';
 
-        $this->carousel = $carousel;
+            switch ($p['typeMedia']){
+                case "image":
+                    $card .= sprintf('<img src="%s" onclick="biggerImg(this)" alt="%s" /><p>', $p['mediaPath'], $p['nameMedia']);
+                break;
+                case "video":
+                    $card .= sprintf('<video width="320" height="240" class="mx-auto" autoplay loop controls><source src="%s" type="%s" /></video><p>', $p['mediaPath'], $p['fullMediaType']);
+                break;
+                case "audio":
+                    $card .= sprintf('<audio controls><source src="%s" type="%s" /></audio><p>', $p['mediaPath'], $p['fullMediaType']);
+                break;
+            }
+        }
+
+        //     if($key==0){
+        //         $carousel .= '<div class="carousel-item active">';
+        //     }else {
+        //         $carousel .= '<div class="carousel-item ">';
+        //     }
+        //     $carousel .= sprintf('<img src="%s" onclick="biggerImg(this)" class="d-block w-100" alt="%s" />', $p['mediaPath'], $p['nameMedia']);
+        //     $carousel .= '</div>';
+        // }
+        // $carousel .= '</div>
+        //               <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+        //               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        //               <span class="sr-only">Previous</span>
+        //               </a>
+        //               <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+        //               <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        //               <span class="sr-only">Next</span>
+        //               </a>
+        //               </div>
+        $card .= '<p>';
+        $card .= $this->comment;
+        $card .= '</p></div>';
+
+        $this->card = $card;
     }
 
     function getComment()
@@ -135,11 +152,11 @@ class PostWithMultipleMedia extends Post
 
     function getCard()
     {
-        return $this->carousel;
+        return $this->card;
     }
 
     function getCarousel()
     {
-        return $this->carousel;
+        return $this->card;
     }
 }

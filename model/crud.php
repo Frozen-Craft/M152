@@ -75,7 +75,7 @@ function deletePostMedias($id){
 function getPosts(){
     static $querry = null;
     $querry = dbConnect()->prepare("SELECT * FROM posts ORDER BY creationDate DESC");
-    $result = $querry->execute();
+    $querry->execute();
     return $querry->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -83,9 +83,26 @@ function getMedia($idPost){
     static $querry = null;
     $querry = dbConnect()->prepare("SELECT * FROM medias WHERE idPost = :id");
     $querry -> bindParam("id", $idPost, PDO::PARAM_INT);
-    $result = $querry->execute();
+    $querry->execute();
     return $querry->fetchAll(PDO::FETCH_ASSOC);
 
+}
+
+function deleteMedia($idMedia){
+    static $querry = null;
+    $querry = dbConnect()->prepare("DELETE FROM medias WHERE idPost = :id");
+    $querry -> bindParam("id", $idMedia, PDO::PARAM_INT);
+    return $querry->execute();
+}
+
+function editComment($comment, $idPost){
+    static $querry = null;
+    $dateN = date('Y-m-d');
+    $querry = dbConnect()->prepare("UPDATE `posts` SET `comment`=:comment,`modificationDate`=:dateN WHERE :id");
+    $querry -> bindParam("id", $idPost, PDO::PARAM_INT);
+    $querry -> bindParam("dateN", $dateN, PDO::PARAM_STR);
+    $querry -> bindParam("comment", $comment, PDO::PARAM_STR);
+    return $querry->execute();
 }
 
 function startTransaction(){
