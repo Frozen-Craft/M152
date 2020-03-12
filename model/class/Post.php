@@ -17,7 +17,7 @@ class Post
     function makeCard()
     {
         $card = '<div class="card mt-2 mb-2">
-                 <div class="mr-3 text-right"><a href="#"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
+                 <div class="mr-3 text-right"><a href="?action=editPost&idPost='.$this->idPost.'"><img class="mr-2 icons" src="css/icons/edit-solid.svg" alt="edit-icon" /></a><a href="?action=removePost&id='.$this->idPost.'"><img class="icons" src="css/icons/times-circle-solid.svg" alt="remove-icon" /></a></div><p>';
         $card .= $this->comment;
         $card .= '</p></div>';
         $this->card = $card;

@@ -28,17 +28,15 @@ function addMedia($type, $fullType, $name, $path, $idPost){
         
     $now = date("Y/m/d H:i:s");
     
-    $querry = dbConnect()->prepare("INSERT INTO `medias` (typeMedia, fullMediaType, nameMedia, creationDate, modificationDate, mediaPath, idPost) VALUES (:type, :fullType, :name, :creatioD, :modificationD, :path, :idPost)");
-    $querry -> bindParam("type", $type, PDO::PARAM_STR);
+    $querry = dbConnect()->prepare("INSERT INTO `medias` (typeMedia, fullMediaType, nameMedia, creationDate, modificationDate, mediaPath, idPost) VALUES (:typeM, :fullType, :nameM, :creatioD, :modificationD, :pathM, :idPost)");
+    $querry -> bindParam("typeM", $type, PDO::PARAM_STR);
     $querry -> bindParam("fullType", $fullType, PDO::PARAM_STR);
-    $querry -> bindParam("name", $name, PDO::PARAM_STR);
+    $querry -> bindParam("nameM", $name, PDO::PARAM_STR);
     $querry -> bindParam("creatioD", $now, PDO::PARAM_STR);
     $querry -> bindParam("modificationD", $now, PDO::PARAM_STR);
-    $querry -> bindParam("path", $path, PDO::PARAM_STR);
+    $querry -> bindParam("pathM", $path, PDO::PARAM_STR);
     $querry -> bindParam("idPost", $idPost, PDO::PARAM_STR);
-    $result = $querry->execute();
-    
-    return $result;
+    return $querry->execute();
 }
 
 //return id of the post
@@ -63,6 +61,7 @@ function deletePost($id){
     $querry -> bindParam("id", $id, PDO::PARAM_INT);
     return $querry->execute();
 }
+
 function deletePostMedias($id){
     static $querry = null;
     
@@ -90,7 +89,7 @@ function getMedia($idPost){
 
 function deleteMedia($idMedia){
     static $querry = null;
-    $querry = dbConnect()->prepare("DELETE FROM medias WHERE idPost = :id");
+    $querry = dbConnect()->prepare("DELETE FROM medias WHERE idMedia = :id");
     $querry -> bindParam("id", $idMedia, PDO::PARAM_INT);
     return $querry->execute();
 }

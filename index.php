@@ -7,15 +7,15 @@
  */
 
 session_start();
+$dest = filter_input(INPUT_GET, "action", FILTER_SANITIZE_STRING);
 
-if(!empty($_SESSION['EditPost'])){
+if(!empty($_SESSION['EditPost']['AddedMedia']) && $dest!="editPost"){
     foreach($_SESSION['EditPost']['AddedMedia'] as $key => $m){
         unlink($m['path']);
     }
     $_SESSION['EditPost'] = array();
 }
 
-$dest = filter_input(INPUT_GET, "action", FILTER_SANITIZE_STRING);
 $role = "default";
 
 $permissions=[

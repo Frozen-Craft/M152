@@ -9,7 +9,7 @@ $removedImg = filter_input(INPUT_POST, 'removeImg', FILTER_SANITIZE_NUMBER_INT);
 $restoreImg = filter_input(INPUT_POST, 'restoreImg', FILTER_SANITIZE_NUMBER_INT);
 $rmAddImg = filter_input(INPUT_POST, 'rmAddImg', FILTER_SANITIZE_STRING);
 
-if (empty($cancelled) && empty($submited) && empty($removedImg) && empty($postMessage) && empty($restoreImg) && empty($_SESSION['EditPost']['Active'])) {
+if (empty($cancelled) && empty($submited) && empty($removedImg) && empty($postMessage) && empty($restoreImg) && empty($_SESSION['EditPost']['Active']) && empty($rmAddImg)) {
     $_SESSION['EditPost'] = array();
     $_SESSION['EditPost']['RemovedImg'] = array();
     $_SESSION['EditPost']['AddedMedia'] = array();
@@ -19,16 +19,16 @@ if (empty($cancelled) && empty($submited) && empty($removedImg) && empty($postMe
 
 if (!empty($_FILES['uploadedFile']['name'][0])) {
     foreach ($_FILES['uploadedFile']['tmp_name'] as $key => $value) {
-        $path = "media/tmp_media/" . uniqid() . $_FILES['uploadedFile']['name'][$key] ;
+        $path = "media/tmp_media/" . uniqid() . $_FILES['uploadedFile']['name'][$key];
         $type = explode('/', mime_content_type($_FILES['uploadedFile']['tmp_name'][$key]));
         move_uploaded_file($_FILES['uploadedFile']['tmp_name'][$key], $path);
-        array_push($_SESSION['EditPost']['AddedMedia'], ['name'=>$_FILES['uploadedFile']['name'][$key], 'path'=>$path, 'type'=>$type[0], 'fullType'=>$type[0]."/".$type[1]]);
+        array_push($_SESSION['EditPost']['AddedMedia'], ['name' => $_FILES['uploadedFile']['name'][$key], 'path' => $path, 'type' => $type[0], 'fullType' => $type[0] . "/" . $type[1]]);
     }
 }
 
-if(!empty($rmAddImg)){
-    foreach($_SESSION['EditPost']['AddedMedia'] as $key => $m){
-        if($m['name'] == $rmAddImg){
+if (!empty($rmAddImg)) {
+    foreach ($_SESSION['EditPost']['AddedMedia'] as $key => $m) {
+        if ($m['name'] == $rmAddImg) {
             unlink($m['path']);
             unset($_SESSION['EditPost']['AddedMedia'][$key]);
         }
@@ -50,48 +50,60 @@ if ($cancelled == 'Annuler') {
     exit();
 }
 
-if($submited){
+if ($submited) {
     startTransaction();
-    try{
+    try {
         $medias = getMedia($idPost);
-        foreach($_SESSION['EditPost']['RemovedImg'] as $rmMedia){
-            foreach($medias as $m){
-                if($m['idMedia'] == $rmMedia ){
+        foreach ($_SESSION['EditPost']['RemovedImg'] as $rmMedia) {
+            echo 1;
+            foreach ($medias as $m) {
+                if ($m['idMedia'] == $rmMedia) {
                     $path = $m['mediaPath'];
                 }
             }
-            if(deleteMedia($rmMedia)){
+            if (deleteMedia($rmMedia)) {
                 unlink($path);
             }
         }
-        foreach($_SESSION['EditPost']['AddedMedia'] as $addMedia){
-            addMedia($addMedia['type'], $addMedia['fullType'], $addMedia['name'], $addMedia['path'], $idPost);
+        foreach ($_SESSION['EditPost']['AddedMedia'] as $addMedia) {
+            $ext = explode("/",$addMedia['fullType'])[1];
+            $newPath = "media/" . $addMedia['type'] . "/" . md5($addMedia["name"] . date("d m Y H:i:s:u") . uniqid()) . '.' . $ext;
+            if(rename($addMedia['path'], $newPath)){
+                addMedia($addMedia['type'], $addMedia['fullType'], $addMedia['name'], $newPath, $idPost);
+            }else{
+                unlink($addMedia['path']);
+            }
         }
-    }catch(Exception $e){
+        editComment($postMessage, $idPost);
+        $_SESSION['EditPost'] = array();
+        commit();
+        header("Location: ?action=index");
+        exit();
+    } catch (Exception $e) {
         rollback();
     }
 }
 
 function showAddMedias()
 {
-    $m = $_SESSION['EditPost']['AddedMedia'];
     $strMedia = "";
-            if (!empty($m)) {
+    if (!empty($_SESSION['EditPost']['AddedMedia'])) {
+        $m = $_SESSION['EditPost']['AddedMedia'];
         foreach ($m as $me) {
             $strMedia .= <<<MEDIAS
             <div class="card col-md-3" width="20%">
             MEDIAS;
 
-            switch ($me['type']){
+            switch ($me['type']) {
                 case "image":
                     $strMedia .= sprintf('<img src="%s" class="card-img-top mt-1" alt="%s" /><p>', $me['path'], $me['name']);
-                break;
+                    break;
                 case "video":
                     $strMedia .= sprintf('<video width="224" height="126" class="mx-auto mt-1" controls><source src="%s" type="%s" /></video><p>', $me['path'], $me['fullType']);
-                break;
+                    break;
                 case "audio":
                     $strMedia .= sprintf('<audio class="mt-1" controls><source src="%s" type="%s" /></audio><p>', $me['path'], $me['fullType']);
-                break;
+                    break;
             }
 
             $name = $me['name'];
@@ -118,16 +130,16 @@ function showMedias($idPost)
             <div class="card col-md-3" width="20%">
             MEDIAS;
 
-            switch ($me['typeMedia']){
+            switch ($me['typeMedia']) {
                 case "image":
                     $strMedia .= sprintf('<img src="%s" class="card-img-top mt-1" alt="%s" /><p>', $me['mediaPath'], $me['nameMedia']);
-                break;
+                    break;
                 case "video":
                     $strMedia .= sprintf('<video width="224" height="126" class="mx-auto mt-1" controls><source src="%s" type="%s" /></video><p>', $me['mediaPath'], $me['fullMediaType']);
-                break;
+                    break;
                 case "audio":
                     $strMedia .= sprintf('<audio class="mt-1" controls><source src="%s" type="%s" /></audio><p>', $me['mediaPath'], $me['fullMediaType']);
-                break;
+                    break;
             }
             $strMedia .= <<<MEDIAS
             <div class="card-body">
@@ -141,16 +153,16 @@ function showMedias($idPost)
             <div class="card col-md-3 bg-dark" width="20%">
             MEDIAS;
 
-            switch ($me['typeMedia']){
+            switch ($me['typeMedia']) {
                 case "image":
                     $strMedia .= sprintf('<img src="%s" class="card-img-top mt-1" alt="%s" /><p>', $me['mediaPath'], $me['nameMedia']);
-                break;
+                    break;
                 case "video":
                     $strMedia .= sprintf('<video width="224" height="126" class="mx-auto mt-1" controls><source src="%s" type="%s" /></video><p>', $me['mediaPath'], $me['fullMediaType']);
-                break;
+                    break;
                 case "audio":
                     $strMedia .= sprintf('<audio class="mt-1" controls><source src="%s" type="%s" /></audio><p>', $me['mediaPath'], $me['fullMediaType']);
-                break;
+                    break;
             }
             $strMedia .= <<<MEDIAS
             <div class="card-body">
