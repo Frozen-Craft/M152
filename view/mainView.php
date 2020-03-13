@@ -19,7 +19,7 @@
             <div class="card mx-auto" >
                 <img src="media/image/profilepicture.jpg" style="width: 90%;" class="card-img-top mt-2 mx-auto" alt="profilePicture">
                 <div class="card-body">
-                    <p class="card-text">Ceci est ma photo de profile</p>
+                    <p class="card-text">Ceci est ma photo de profil</p>
                 </div>
             </div>
         </div>

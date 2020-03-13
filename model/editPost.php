@@ -21,8 +21,10 @@ if (!empty($_FILES['uploadedFile']['name'][0])) {
     foreach ($_FILES['uploadedFile']['tmp_name'] as $key => $value) {
         $path = "media/tmp_media/" . uniqid() . $_FILES['uploadedFile']['name'][$key];
         $type = explode('/', mime_content_type($_FILES['uploadedFile']['tmp_name'][$key]));
-        move_uploaded_file($_FILES['uploadedFile']['tmp_name'][$key], $path);
-        array_push($_SESSION['EditPost']['AddedMedia'], ['name' => $_FILES['uploadedFile']['name'][$key], 'path' => $path, 'type' => $type[0], 'fullType' => $type[0] . "/" . $type[1]]);
+        if($type[0] == "image" || $type[0] == "video" || $type[0] == "audio"){
+            move_uploaded_file($_FILES['uploadedFile']['tmp_name'][$key], $path);
+            array_push($_SESSION['EditPost']['AddedMedia'], ['name' => $_FILES['uploadedFile']['name'][$key], 'path' => $path, 'type' => $type[0], 'fullType' => $type[0] . "/" . $type[1]]);
+        }
     }
 }
 
